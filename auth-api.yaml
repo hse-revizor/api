@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Revizor Auth Service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /user/{userId}/permission:
+    put:
+      summary: Grant a resource permission
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: resourceType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'projectGroup'
+              - 'rule'
+        - name: resourceId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+    delete:
+      summary: Revoke a resource permission
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: resourceType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'projectGroup'
+              - 'rule'
+        - name: resourceId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
