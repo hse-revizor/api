@@ -1,0 +1,157 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Revizor Projects Service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+components:
+  schemas:
+    ProjectDto:
+      type: object
+      properties:
+        name:
+          type: string
+        repositoryURL:
+          type: string
+      required:
+        - name
+        - repositoryURL
+    GetProjectDto:
+      type: object
+      properties:
+        name:
+          type: string
+        lastCheckDate:
+          type: string
+        repositoryURL:
+          type: string
+      required:
+        - name
+        - repositoryURL
+        - fileName
+    ProjectGroupDto:
+      type: object
+      properties:
+        name:
+          type: string
+        items:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - repositoryURL
+paths:
+  /project:
+    post:
+      summary: Create a project
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /project/{projectId}:
+    get:
+      summary: Get a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+    delete:
+      summary: Remove a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProjectDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /project-group:
+    post:
+      summary: Create a project group
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroupDto'
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /project-group/{projectGroupId}:
+    get:
+      summary: Get a project group
+      parameters:
+        - name: projectGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroupDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+    delete:
+      summary: Remove a project group
+      parameters:
+        - name: projectGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
