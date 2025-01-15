@@ -1,0 +1,119 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Revizor Rules Service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+components:
+  schemas:
+    CreateReportsDto:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+    GetReportDto:
+      type: object
+      properties:
+        projectId:
+          type: string
+        date:
+          type: string
+        errosCount:
+          type: number
+      required:
+        - projectId
+        - date
+        - errosCount
+    GetReportResultsDto:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              location:
+                type: string
+              violatedRuleId:
+                type: string
+      required:
+        - projectId
+        - date
+        - errosCount
+    GetReportsPageDto:
+      type: object
+      properties:
+        reports:
+          $ref: '#/components/schemas/GetReportDto'
+      required:
+        - reports
+paths:
+  /report:
+    put:
+      summary: Create a report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReportsDto'
+      responses:
+        '202':
+          description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /report/{reportId}:
+    get:
+      summary: Get a report with it's results
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReportResultsDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /report/page:
+    get:
+      summary: Get a reports page
+      parameters:
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReportsPageDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
