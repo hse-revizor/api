@@ -7,28 +7,88 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 components:
   schemas:
+    GetRuleDto:
+      type: object
+      properties:
+        id:
+          type: string
+        templateId:
+          type: string
+        applyToURI:
+          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional query params may be specified to point to specific location in a resouce.
+          type: string
+        value:
+          type: string
+      required:
+        - templateId
+        - applyToURI
+        - value
     CreateRuleDto:
       type: object
       properties:
+        id:
+          type: string
         templateId:
+          type: string
+        applyToURI:
+          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional query params may be specified to point to specific location in a resouce.
+          type: string
+        value:
+          type: string
+      required:
+        - templateId
+        - applyToURI
+        - value
+    GetPolicyDto:
+      type: object
+      properties:
+        id:
           type: string
         projectId:
           type: string
-        fileName:
-          type: string
-        lineId:
-          type: number
+        rulesIds:
+          type: array
+          items:
+            type: string
       required:
-        - templateId
         - projectId
-        - fileName
+        - rulesIds
+    CreatePolicyDto:
+      type: object
+      properties:
+        projectId:
+          type: string
+        rulesIds:
+          type: array
+          items:
+            type: string
+      required:
+        - projectId
+        - rulesIds
 paths:
   /rule:
+    post:
+      summary: Create a rule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRuleDto'
+      responses:
+        '201':
+          description: created
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /rule/{id}:
     get:
       summary: Get rule for a project
       parameters:
-        - name: projectId
-          in: query
+        - name: id
+          in: path
           required: true
           schema:
             type: string
@@ -38,39 +98,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateRuleDto'
+                $ref: '#/components/schemas/GetRuleDto'
         '401':
           description: unauthorized
         '403':
           description: forbidden
         '500':
           description: internal error
-    put:
-      summary: Create a rule
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateRuleDto'
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: unauthorized
-        '403':
-          description: forbidden
-        '500':
-          description: internal error
-  /rule/{ruleId}:
     delete:
-      summary: Remove a rule from a project
+      summary: Remove a rule
       parameters:
-        - name: projectId
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: ruleId
+        - name: id
           in: path
           required: true
           schema:
@@ -78,6 +116,66 @@ paths:
       responses:
         '200':
           description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /policy:
+    post:
+      summary: Create a rules application policy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePolicyDto'
+      responses:
+        '201':
+          description: created
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /policy/{id}:
+    get:
+      summary: Retrieve a rules application policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPolicyDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+    delete:
+      summary: Remove a policy from a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPolicyDto'
         '401':
           description: unauthorized
         '403':
