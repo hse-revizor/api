@@ -7,23 +7,29 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 components:
   schemas:
-    CreateReportDto:
+    CreateReportsDto:
       type: object
       properties:
-        groupId:
-          type: string
-        reportId:
+        projectId:
           type: string
       required:
-        - groupId
-        - reportId
+        - projectId
     GetReportDto:
       type: object
       properties:
+        projectId:
+          type: string
         date:
           type: string
-        groupId:
-          type: string
+        errosCount:
+          type: number
+      required:
+        - projectId
+        - date
+        - errosCount
+    GetReportResultsDto:
+      type: object
+      properties:
         results:
           type: array
           items:
@@ -34,39 +40,28 @@ components:
               violatedRuleId:
                 type: string
       required:
-        - groupId
+        - projectId
         - date
-        - results
+        - errosCount
+    GetReportsPageDto:
+      type: object
+      properties:
+        reports:
+          $ref: '#/components/schemas/GetReportDto'
+      required:
+        - reports
 paths:
   /report:
-    post:
+    put:
       summary: Create a report
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReportDto'
+              $ref: '#/components/schemas/CreateReportsDto'
       responses:
-        '201':
-          description: created
-        '401':
-          description: unauthorized
-        '403':
-          description: forbidden
-        '409':
-          description: report's id is used
-        '500':
-          description: internal error
-    put:
-      summary: Update a report
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateReportDto'
-      responses:
-        '200':
-          description: updated successfully
+        '202':
+          description: successful operation
         '401':
           description: unauthorized
         '403':
@@ -88,27 +83,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetReportDto'
+                $ref: '#/components/schemas/GetReportResultsDto'
         '401':
           description: unauthorized
         '403':
           description: forbidden
         '500':
           description: internal error
-    delete:
-      summary: Delete a report
+  /report/page:
+    get:
+      summary: Get a reports page
       parameters:
-        - name: reportId
-          in: path
+        - name: offset
+          in: query
           required: true
           schema:
-            type: string
+            type: number
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: number
       responses:
         '200':
-          description: deleted successfully
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReportsPageDto'
         '401':
           description: unauthorized
         '403':
           description: forbidden
         '500':
-          description: internal errorе
+          description: internal error
