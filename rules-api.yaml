@@ -11,9 +11,9 @@ components:
       type: object
       properties:
         templateId:
-          type: uuid
+          type: string
         projectId:
-          type: uuid
+          type: string
         fileName:
           type: string
         lineId:
@@ -24,6 +24,27 @@ components:
         - fileName
 paths:
   /rule:
+    get:
+      summary: Get rule for a project
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRuleDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
     put:
       summary: Create a rule
       requestBody:
@@ -48,12 +69,12 @@ paths:
           in: query
           required: true
           schema:
-            type: uuid
+            type: string
         - name: ruleId
           in: path
           required: true
           schema:
-            type: uuid
+            type: string
       responses:
         '200':
           description: successful operation

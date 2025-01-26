@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Revizor Analysis Service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /check:
+    post:
+      summary: Start a check of the projects given
+      requestBody:
+        content:
+            type: object
+            properties
+              ruleId:
+                type: string # uuid
+              projectsIds:
+                type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            type: string # user access token
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error

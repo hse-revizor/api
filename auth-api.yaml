@@ -6,6 +6,20 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
+  /user/session:
+    post:
+      summary: Login using git provider
+      responses:
+        '200':
+          description: successful operation
+          content:
+            type: string # user access token
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
   /user/{userId}/permission:
     put:
       summary: Grant a resource permission
