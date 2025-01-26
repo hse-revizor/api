@@ -39,6 +39,32 @@ components:
         - templateId
         - applyToURI
         - value
+    GetPolicyDto:
+      type: object
+      properties:
+        id:
+          type: string
+        projectId:
+          type: string
+        rulesIds:
+          type: array
+          items:
+            type: string
+      required:
+        - projectId
+        - rulesIds
+    CreatePolicyDto:
+      type: object
+      properties:
+        projectId:
+          type: string
+        rulesIds:
+          type: array
+          items:
+            type: string
+      required:
+        - projectId
+        - rulesIds
 paths:
   /rule:
     post:
@@ -49,8 +75,8 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateRuleDto'
       responses:
-        '200':
-          description: successful operation
+        '201':
+          description: created
         '401':
           description: unauthorized
         '403':
@@ -90,6 +116,66 @@ paths:
       responses:
         '200':
           description: successful operation
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /policy:
+    post:
+      summary: Create a rules application policy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePolicyDto'
+      responses:
+        '201':
+          description: created
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+  /policy/{id}:
+    get:
+      summary: Retrieve a rules application policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPolicyDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+    delete:
+      summary: Remove a policy from a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPolicyDto'
         '401':
           description: unauthorized
         '403':
