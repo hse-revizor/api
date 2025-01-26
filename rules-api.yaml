@@ -15,7 +15,7 @@ components:
         templateId:
           type: string
         applyToURI:
-          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional query params may be specified to point to specific location in a resouce.
+          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional uri fragments may be specified to point to specific location in a resouce.
           type: string
         value:
           type: string
@@ -31,7 +31,7 @@ components:
         templateId:
           type: string
         applyToURI:
-          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional query params may be specified to point to specific location in a resouce.
+          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional uri fragments may be specified to point to specific location in a resouce.
           type: string
         value:
           type: string
