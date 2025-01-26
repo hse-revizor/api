@@ -7,45 +7,41 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 components:
   schemas:
+    GetRuleDto:
+      type: object
+      properties:
+        id:
+          type: string
+        templateId:
+          type: string
+        applyToURI:
+          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional query params may be specified to point to specific location in a resouce.
+          type: string
+        value:
+          type: string
+      required:
+        - templateId
+        - applyToURI
+        - value
     CreateRuleDto:
       type: object
       properties:
+        id:
+          type: string
         templateId:
           type: string
-        projectId:
+        applyToURI:
+          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional query params may be specified to point to specific location in a resouce.
           type: string
-        fileName:
+        value:
           type: string
-        lineId:
-          type: number
       required:
         - templateId
-        - projectId
-        - fileName
+        - applyToURI
+        - value
 paths:
   /rule:
-    get:
-      summary: Get rule for a project
-      parameters:
-        - name: projectId
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateRuleDto'
-        '401':
-          description: unauthorized
-        '403':
-          description: forbidden
-        '500':
-          description: internal error
-    put:
+    post:
       summary: Create a rule
       requestBody:
         content:
@@ -61,16 +57,32 @@ paths:
           description: forbidden
         '500':
           description: internal error
-  /rule/{ruleId}:
-    delete:
-      summary: Remove a rule from a project
+  /rule/{id}:
+    get:
+      summary: Get rule for a project
       parameters:
-        - name: projectId
-          in: query
+        - name: id
+          in: path
           required: true
           schema:
             type: string
-        - name: ruleId
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRuleDto'
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
+    delete:
+      summary: Remove a rule
+      parameters:
+        - name: id
           in: path
           required: true
           schema:
