@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Parsing Service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /content:
+    get:
+      summary: Get a content for a given URI
+      parameters:
+        - name: uri
+          in: query
+          required: true
+          description:  May be a link to a file in a remote git repository. The lineId and symbolId optional uri fragments may be specified to point to specific location in a resouce.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: internal error
