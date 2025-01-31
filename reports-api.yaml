@@ -7,45 +7,63 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 components:
   schemas:
-    CreateReportDto:
+    CheckingCombination:
       type: object
-      properties:
-        groupId:
-          type: string
-        reportId:
-          type: string
       required:
-        - groupId
-        - reportId
-    GetReportDto:
+        - id
+        - projects_ids
+        - rules_ids
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          nullable: true
+        projects_ids:
+          type: array
+          items:
+            type: integer
+        rules_ids:
+          type: array
+          items:
+            type: integer
+    ReportData:
       type: object
       properties:
-        date:
-          type: string
-        groupId:
-          type: string
-        results:
+        reportData:
           type: array
           items:
             type: object
             properties:
-              location:
-                type: string
-              violatedRuleId:
-                type: string
-      required:
-        - groupId
-        - date
-        - results
+              project_id:
+                type: integer
+              rules_matching:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ruleId:
+                      type: integer
+                    isApplied:
+                      type: boolean
 paths:
   /report:
     post:
       summary: Create a report
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReportDto'
+              type: object
+              required:
+                - checkingCombination
+                - reportId
+              properties:
+                checkingCombination:
+                  $ref: '#/components/schemas/CheckingCombination'
+                reportId:
+                  type: integer
       responses:
         '201':
           description: created
@@ -63,7 +81,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReportDto'
+              type: object
+              required:
+                - reportId
+              properties:
+                reportId:
+                  type: integer
       responses:
         '200':
           description: updated successfully
@@ -81,14 +104,14 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetReportDto'
+                $ref: '#/components/schemas/ReportData'
         '401':
           description: unauthorized
         '403':
@@ -102,7 +125,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: deleted successfully
