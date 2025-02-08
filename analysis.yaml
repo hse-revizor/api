@@ -5,23 +5,37 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
+components:
+  schemas:
+    CheckingCombination:
+      type: object
+      required:
+        - projects_ids
+        - rules_ids
+      properties:
+        name:
+          type: string
+          nullable: true
+        projects_ids:
+          type: array
+          items:
+            type: string
+        rules_ids:
+          type: array
+          items:
+            type: string
 paths:
   /check:
     post:
       summary: Start a check of the projects given
       requestBody:
         content:
-            type: object
-            properties
-              ruleId:
-                type: string # uuid
-              projectsIds:
-                type: string
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckingCombination'
       responses:
-        '200':
+        '202':
           description: successful operation
-          content:
-            type: string # user access token
         '401':
           description: unauthorized
         '403':

@@ -10,23 +10,26 @@ components:
     CheckingCombination:
       type: object
       required:
-        - id
         - projects_ids
         - rules_ids
       properties:
-        id:
-          type: integer
         name:
           type: string
           nullable: true
         projects_ids:
           type: array
           items:
-            type: integer
+            type: string
         rules_ids:
           type: array
           items:
-            type: integer
+            type: string
+    ReportCreationDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: uuid
     ReportData:
       type: object
       properties:
@@ -36,19 +39,19 @@ components:
             type: object
             properties:
               project_id:
-                type: integer
+                type: string
               rules_matching:
                 type: array
                 items:
                   type: object
                   properties:
                     ruleId:
-                      type: integer
+                      type: string
                     isApplied:
                       type: boolean
 paths:
   /report:
-    post:
+    put:
       summary: Create a report
       requestBody:
         required: true
@@ -63,10 +66,14 @@ paths:
                 checkingCombination:
                   $ref: '#/components/schemas/CheckingCombination'
                 reportId:
-                  type: integer
+                  type: string
       responses:
         '201':
           description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportCreationDto'
         '401':
           description: unauthorized
         '403':
@@ -75,19 +82,13 @@ paths:
           description: report's id is used
         '500':
           description: internal error
-    put:
+    patch:
       summary: Update a report
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - reportId
-              properties:
-                reportId:
-                  type: integer
-      responses:
+                $ref: '#/components/schemas/ReportData'
         '200':
           description: updated successfully
         '401':
@@ -104,7 +105,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: successful operation
@@ -125,7 +126,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: deleted successfully

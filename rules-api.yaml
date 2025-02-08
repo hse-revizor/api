@@ -12,15 +12,14 @@ components:
       properties:
         id:
           type: string
-        templateId:
+          description: uuid
+        typeId:
           type: string
-        applyToURI:
-          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional uri fragments may be specified to point to specific location in a resouce.
+        params:
           type: string
-        value:
-          type: string
+          description: json obj. Necessarily field - applyToURI
       required:
-        - templateId
+        - typeId
         - applyToURI
         - value
     CreateRuleDto:
@@ -28,15 +27,14 @@ components:
       properties:
         id:
           type: string
-        templateId:
+          description: uuid
+        typeId:
           type: string
-        applyToURI:
-          description: May be a link to a file. The <<lineId>> and <<symbolId>> optional uri fragments may be specified to point to specific location in a resouce.
+        params:
           type: string
-        value:
-          type: string
+          description: json obj. Necessarily field - applyToURI
       required:
-        - templateId
+        - typeId
         - applyToURI
         - value
     GetPolicyDto:
@@ -44,6 +42,7 @@ components:
       properties:
         id:
           type: string
+          description: uuid
         projectId:
           type: string
         rulesIds:
@@ -58,6 +57,7 @@ components:
       properties:
         projectId:
           type: string
+          description: uuid
         rulesIds:
           type: array
           items:
@@ -77,6 +77,10 @@ paths:
       responses:
         '201':
           description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRuleDto'
         '401':
           description: unauthorized
         '403':
@@ -116,6 +120,10 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRuleDto'
         '401':
           description: unauthorized
         '403':
