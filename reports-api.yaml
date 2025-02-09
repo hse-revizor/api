@@ -27,7 +27,7 @@ components:
     ReportCreationDto:
       type: object
       properties:
-        id:
+        reportId:
           type: string
           description: uuid
     ReportData:
@@ -61,12 +61,9 @@ paths:
               type: object
               required:
                 - checkingCombination
-                - reportId
               properties:
                 checkingCombination:
                   $ref: '#/components/schemas/CheckingCombination'
-                reportId:
-                  type: string
       responses:
         '201':
           description: created
@@ -89,6 +86,7 @@ paths:
           application/json:
             schema:
                 $ref: '#/components/schemas/ReportData'
+      responses:
         '200':
           description: updated successfully
         '401':
