@@ -79,13 +79,20 @@ paths:
           description: report's id is used
         '500':
           description: internal error
+  /report/{reportId}:
     patch:
       summary: Update a report
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/ReportData'
+              $ref: '#/components/schemas/ReportData'
       responses:
         '200':
           description: updated successfully
@@ -95,9 +102,8 @@ paths:
           description: forbidden
         '500':
           description: internal error
-  /report/{reportId}:
     get:
-      summary: Get a report with it's results
+      summary: Get a report with its results
       parameters:
         - name: reportId
           in: path
@@ -133,4 +139,4 @@ paths:
         '403':
           description: forbidden
         '500':
-          description: internal errorе
+          description: internal error
