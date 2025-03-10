@@ -6,14 +6,48 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /content:
+  /github-content:
     get:
-      summary: Get a content for a given URI
+      summary: Get a content from github repository for a given URI
       parameters:
         - name: uri
           in: query
           required: true
-          description:  May be a link to a file in a remote git repository. The lineId and symbolId optional uri fragments may be specified to point to specific location in a resouce.
+          description:  URI is a path to a file in a remote git repository.
+          schema:
+            type: string
+        - name: row
+          in: query
+          required: false
+          description:  Optional param that specifies line or segment of lines to be parsed. Example:row=7 or row=1-7.
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '500':
+          description: internal error
+  /local-content:
+    get:
+      summary: Get a content from local repository for a given path
+      parameters:
+        - name: path
+          in: query
+          required: true
+          description:  Path for file in local repository, row param may be used to specify single row or a segment of lines to be parsed.
+          schema:
+            type: string
+        - name: row
+          in: query
+          required: false
+          description:  Optional param that specifies line or segment of lines to be parsed. Example:row=7 or row=1-7.
           schema:
             type: string
       responses:
@@ -23,9 +57,7 @@ paths:
             application/json:
               schema:
                 type: string
-        '401':
-          description: unauthorized
-        '403':
-          description: forbidden
+        '400':
+          description: bad request
         '500':
           description: internal error
