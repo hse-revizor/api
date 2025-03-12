@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Scheduler Service API
+  description: API for scheduling and launching rule checks in code projects.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /schedules:
+    post:
+      summary: Schedule a new rule check for a project
+      description: Schedules a rule check for a project based on the project's checking policy.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  type: string
+                  description: The ID of the project to be checked.
+                policy:
+                  type: object
+                  description: The checking policy for the project (e.g., frequency, triggers).
+              required:
+                - project_id
+                - policy
+      responses:
+        '201':
+          description: Rule check successfully scheduled.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule_id:
+                    type: string
+                    description: The ID of the scheduled check.
+        '400':
+          description: Invalid request body.
+        '500':
+          description: Internal server error.
+
+  /immediate-check:
+    post:
+      summary: Trigger an immediate rule check
+      description: Triggers an immediate rule check for a project, bypassing the regular schedule.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  type: string
+                  description: The ID of the project to be checked.
+              required:
+                - project_id
+      responses:
+        '202':
+          description: Immediate rule check successfully triggered.
+        '400':
+          description: Invalid request body.
+        '500':
+          description: Internal server error.
