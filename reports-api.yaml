@@ -128,3 +128,24 @@ paths:
           description: deleted successfully
         '500':
           description: internal error
+  /csv/{reportId}:
+    get:
+      summary: Export a report in CSV format
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CSV file with report data
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Report not found
+        '500':
+          description: Internal server error
