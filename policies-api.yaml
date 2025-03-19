@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Policies Service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /policy:
+    post:
+      summary: Create new checking policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePolicyRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckingPolicy'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal error
+
+components:
+  schemas:
+    CheckingCombination:
+      type: object
+      required:
+        - projects_ids
+        - rules_ids
+      properties:
+        name:
+          type: string
+          nullable: true
+        projects_ids:
+          type: array
+          items:
+            type: string
+        rules_ids:
+          type: array
+          items:
+            type: string
+
+    PolicyParams:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: [onCommit, IntervalChecking]
+        params:
+          type: array
+          items:
+            type: string
+
+    CreatePolicyRequest:
+      type: object
+      required:
+        - combination
+        - policy
+      properties:
+        combination:
+          $ref: '#/components/schemas/CheckingCombination'
+        policy:
+          $ref: '#/components/schemas/PolicyParams'
+
+    CheckingPolicy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        combination:
+          $ref: '#/components/schemas/CheckingCombination'
+        policy:
+          $ref: '#/components/schemas/PolicyParams'
