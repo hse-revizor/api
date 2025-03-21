@@ -128,7 +128,7 @@ paths:
           description: deleted successfully
         '500':
           description: internal error
-  /csv/{reportId}:
+  /csv-export/{reportId}:
     get:
       summary: Export a report in CSV format
       parameters:
